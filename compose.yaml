@@ -1,0 +1,13 @@
+# SQLite e' un database incorporato: non serve un container MySQL.
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:5000:5000"
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      DB_PATH: /app/instance/leaderboard.db
+    volumes:
+      - ./instance:/app/instance

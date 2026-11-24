@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="panel form-panel">
+  <p class="eyebrow">SIMULAZIONE PARTITA</p>
+  <h1>Aggiungi un tempo</h1>
+  <p>L'escape room non deve essere finita: qui puoi inserire i risultati manualmente.</p>
+  <form method="post">
+    <label for="nickname">Nickname del giocatore</label>
+    <input id="nickname" name="nickname" placeholder="Es. Mario" minlength="2" maxlength="24" required>
+    <label for="seconds">Tempo impiegato (secondi)</label>
+    <input id="seconds" name="seconds" type="number" min="1" max="600" step="1" value="312" required>
+    <label for="penalty">Penalità (secondi)</label>
+    <input id="penalty" name="penalty" type="number" min="0" max="600" step="1" value="15" required>
+    <button class="button" type="submit">Salva risultato</button>
+  </form>
+  <p class="hint">Esempio: 312 secondi + 15 di penalità = 05:27.000. Quando Unity sarà pronto, invierà millisecondi direttamente all'API.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero compact">
+  <p class="eyebrow">PANNELLO AMMINISTRATORE</p>
+  <h1>Gestione risultati</h1>
+  <p>Qui puoi eliminare un tempo inserito per errore. I player non possono farlo.</p>
+</section>
+<section class="panel">
+  {% if scores %}
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Giocatore</th><th>Totale</th><th>Azione</th></tr></thead>
+        <tbody>
+        {% for score in scores %}
+          <tr>
+            <td class="nickname">{{ score.nickname }}</td>
+            <td class="total">{{ score.total_ms|time }}</td>
+            <td>
+              <form action="{{ url_for('admin.elimina', score_id=score.id) }}" method="post">
+                <button type="submit" class="danger">Elimina</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>Non ci sono risultati da eliminare.</p>
+  {% endif %}
+</section>
+{% endblock %}

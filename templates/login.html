@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="panel form-panel">
+  <p class="eyebrow">ACCESSO</p>
+  <h1>Login</h1>
+  <p>Accedi come player per aggiungere risultati, oppure come admin per gestirli.</p>
+  <form method="post">
+    <label for="username">Username</label>
+    <input id="username" name="username" placeholder="player o admin" required>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required>
+    <button class="button" type="submit">Accedi</button>
+  </form>
+  <p class="hint">Gli account sono creati automaticamente dal file <code>.env</code>.</p>
+</section>
+{% endblock %}

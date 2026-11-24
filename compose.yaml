@@ -1,4 +1,3 @@
-# SQLite e' un database incorporato: non serve un container MySQL.
 services:
   web:
     build: .

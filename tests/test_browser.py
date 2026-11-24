@@ -1,4 +1,3 @@
-"""Tre test Playwright: aprono Chromium e simulano l'utente."""
 from threading import Thread
 import pytest
 from playwright.sync_api import expect

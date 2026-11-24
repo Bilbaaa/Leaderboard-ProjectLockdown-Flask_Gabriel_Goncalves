@@ -1,4 +1,3 @@
-"""Tutto il database in un solo file: SQLite e migrazioni SQL."""
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path

@@ -1,4 +1,3 @@
-# Facoltativo: esegui il progetto con Docker (come nella Lezione 6).
 FROM python:3.13-slim
 WORKDIR /app
 COPY requirements.txt .

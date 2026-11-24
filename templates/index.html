@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">ESCAPE ROOM VR · META QUEST</p>
+  <h1>Classifica <span>Project Lockdown</span></h1>
+  <p>Chi completa l'escape room nel minor tempo? La penalità viene aggiunta al tempo finale.</p>
+  {% if session.get('username') %}
+    <a class="button" href="{{ url_for('frontend.aggiungi') }}">+ Inserisci un tempo di prova</a>
+  {% else %}
+    <a class="button" href="{{ url_for('frontend.login') }}">Accedi per provare</a>
+  {% endif %}
+</section>
+<section class="panel">
+  <div class="section-heading">
+    <h2>🏆 Migliori tempi</h2>
+    <span>TOP 50</span>
+  </div>
+  {% if scores %}
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Pos.</th><th>Giocatore</th><th>Tempo</th><th>Penalità</th><th>Totale</th></tr></thead>
+        <tbody>
+        {% for score in scores %}
+          <tr>
+            <td class="place">#{{ loop.index }}</td>
+            <td class="nickname">{{ score.nickname }}</td>
+            <td>{{ score.time_ms|time }}</td>
+            <td>+ {{ score.penalty_ms|time }}</td>
+            <td class="total">{{ score.total_ms|time }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty"><p>Non ci sono ancora risultati.</p><p>Accedi e inserisci un tempo finto per provare il progetto.</p></div>
+  {% endif %}
+</section>
+<p class="hint">API pubblica per leggere i risultati: <code>GET /api/scores</code></p>
+{% endblock %}

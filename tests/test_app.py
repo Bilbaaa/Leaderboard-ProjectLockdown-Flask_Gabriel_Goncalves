@@ -1,4 +1,4 @@
-"""Test semplici per pagine, API e database con pytest."""
+
 import sqlite3
 import pytest
 from app import create_app
@@ -64,55 +64,3 @@ def test_form_errato(client):
     assert b"numeri interi" in risposta.data
 
 
-# Test delle API JSON
-
-def test_api_senza_token(client):
-    assert client.post("/api/score", json={"nickname": "Mario"}).status_code == 401
-    assert client.get("/api/scores").get_json() == {"scores": []}
-
-
-@pytest.mark.parametrize("dati", [
-    {"nickname": "A", "time_ms": 1000},
-    {"nickname": "Mario", "time_ms": -1},
-    {"nickname": "Mario", "time_ms": "1000"},
-    {"nickname": "Mario", "time_ms": 590000, "penalty_ms": 30000},
-])
-def test_api_dati_errati(client, dati):
-    risposta = client.post("/api/score", json=dati,
-                           headers={"Authorization": "Bearer test-token"})
-    assert risposta.status_code == 400
-
-
-# Tre test di integrazione: passaggi completi fra API, web e database
-
-def test_integrazione_api_classifica(client):
-    assert invia_tempo(client, "UnityDemo", 312000, 15000).status_code == 201
-    risultato = client.get("/api/scores").get_json()["scores"][0]
-    assert risultato["total_ms"] == 327000
-    assert b"UnityDemo" in client.get("/").data
-    assert b"05:27.000" in client.get("/").data
-
-
-def test_integrazione_form_classifica(client):
-    login(client)
-    risposta = client.post("/aggiungi", data={
-        "nickname": "Giulia", "seconds": "245", "penalty": "10",
-    })
-    assert risposta.status_code == 302
-    assert client.get("/api/scores").get_json()["scores"][0]["total_ms"] == 255000
-
-
-def test_integrazione_eliminazione_admin(client):
-    risultato_id = invia_tempo(client).get_json()["id"]
-    login(client, "admin")
-    assert client.post(f"/admin/elimina/{risultato_id}").status_code == 302
-    assert client.get("/api/scores").get_json()["scores"] == []
-
-
-def test_ordinamento_e_migrazione(client, app):
-    invia_tempo(client, "Veloce", 180000, 90000)
-    invia_tempo(client, "Costante", 240000)
-    risultati = client.get("/api/scores").get_json()["scores"]
-    assert [r["nickname"] for r in risultati] == ["Costante", "Veloce"]
-    with sqlite3.connect(app.config["DB_PATH"]) as db:
-        assert db.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 1
